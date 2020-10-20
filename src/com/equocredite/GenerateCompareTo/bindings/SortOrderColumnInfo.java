@@ -1,7 +1,7 @@
-package com.hartmanster.compareTo.bindings;
+package com.equocredite.GenerateCompareTo.bindings;
 
-import com.hartmanster.compareTo.PsiFieldWithSortOrder;
-import com.hartmanster.compareTo.ui.SortOrderColumnInfoCellRendererEditor;
+import com.equocredite.GenerateCompareTo.PsiFieldWithSortOrder;
+import com.equocredite.GenerateCompareTo.ui.SortOrderColumnInfoCellRendererEditor;
 import com.intellij.util.ui.ColumnInfo;
 import org.jetbrains.annotations.Nullable;
 

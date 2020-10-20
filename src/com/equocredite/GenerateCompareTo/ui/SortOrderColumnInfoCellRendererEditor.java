@@ -1,6 +1,5 @@
-package com.hartmanster.compareTo.ui;
+package com.equocredite.GenerateCompareTo.ui;
 
-import com.hartmanster.compareTo.ui.MyTable;
 import com.intellij.util.ui.AbstractTableCellEditor;
 
 import javax.swing.*;

@@ -1,8 +1,8 @@
 <idea-plugin version="2">
-  <id>com.hartmanster.compareToGenerator</id>
-  <name>Adds a generateCompareTo action to all classes with no external dependencies</name>
+  <id>com.equocredite.GenerateCompareTo</id>
+  <name>Generate compareTo</name>
   <version>1.0</version>
-  <vendor email="atomicforce@gmail.com" url="http://hartmanster.com">Joshua Hartman</vendor>
+  <vendor email="equocredite@gmail.com" url="https://github.com/equocredite">equocredite</vendor>
 
   <description><![CDATA[
       Generates a compareTo() method for the class
@@ -30,8 +30,8 @@
 
   <actions>
     <!-- Add your actions here -->
-      <action id="generateCompareTo" class="com.hartmanster.compareTo.GenerateCompareToAction"
-              text="Generate compareTo()"
+      <action id="generateCompareTo" class="com.equocredite.GenerateCompareTo.GenerateCompareToAction"
+              text="compareTo()"
               description="Generates a compareTo() method">
           <add-to-group group-id="GenerateGroup" anchor="last"/>
       </action>

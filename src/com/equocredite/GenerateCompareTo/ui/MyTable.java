@@ -1,4 +1,4 @@
-package com.hartmanster.compareTo.ui;
+package com.equocredite.GenerateCompareTo.ui;
 
 import com.intellij.util.ui.ListTableModel;
 

@@ -1,6 +1,6 @@
-package com.hartmanster.compareTo;
+package com.equocredite.GenerateCompareTo;
 
-import com.hartmanster.compareTo.ui.GenerateDialog;
+import com.equocredite.GenerateCompareTo.ui.GenerateDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -56,18 +56,8 @@ public class GenerateCompareToAction extends AnAction {
    * @param psiClass
    */
   private void generateImplementsComparable(PsiClass psiClass) {
-    PsiClassType[] implementsListTypes = psiClass.getImplementsListTypes();
 
-    boolean implementsComparable = false;
-    for (PsiClassType implementsListType : implementsListTypes) {
-      PsiClass resolvedClass = implementsListType.resolve();
-      if (resolvedClass != null && "java.lang.Comparable".equals(resolvedClass.getQualifiedName())) {
-        implementsComparable = true;
-        break;
-      }
-    }
-
-    if (!implementsComparable) {
+    if (!PsiComparabilityUtil.implementsComparable(psiClass)) {
       String comparableText = "Comparable<" + psiClass.getName() + ">";
       PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
       PsiJavaCodeReferenceElement referenceElement = elementFactory.createReferenceFromText(comparableText, psiClass);
@@ -97,15 +87,7 @@ public class GenerateCompareToAction extends AnAction {
         builder.append("\n");
       }
 
-      if (type.equals(PsiType.BOOLEAN) ||
-          type.equals(PsiType.BYTE) ||
-          type.equals(PsiType.INT) ||
-          type.equals(PsiType.CHAR) ||
-          type.equals(PsiType.DOUBLE) ||
-          type.equals(PsiType.FLOAT) ||
-          type.equals(PsiType.LONG) ||
-          type.equals(PsiType.SHORT)) {
-
+      if (PsiComparabilityUtil.isPrimitiveComparable(type)) {
         builder.append("if (this." + field.getName() + " " + comparisons[0] + " that." + field.getName() + ")" + " {\n");
         builder.append("  return -1;\n");
         builder.append("} else if (this." + field.getName() + " " + comparisons[1] + " that." + field.getName()+ ") {\n");
@@ -119,9 +101,7 @@ public class GenerateCompareToAction extends AnAction {
         builder.append("}\n");
       }
     }
-
     builder.append("return 0;\n");
-
     builder.append("}\n");
 
     setNewMethod(psiClass, builder.toString(), "compareTo");
@@ -129,19 +109,19 @@ public class GenerateCompareToAction extends AnAction {
 
   protected void setNewMethod(PsiClass psiClass, String newMethodBody, String methodName) {
     PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
-    PsiMethod newEqualsMethod = elementFactory.createMethodFromText(newMethodBody, psiClass);
-    PsiElement method = addOrReplaceMethod(psiClass, newEqualsMethod, methodName);
+    PsiMethod newMethod = elementFactory.createMethodFromText(newMethodBody, psiClass);
+    PsiElement method = addOrReplaceMethod(psiClass, newMethod, methodName);
     JavaCodeStyleManager.getInstance(psiClass.getProject()).shortenClassReferences(method);
   }
 
-  protected PsiElement addOrReplaceMethod(PsiClass psiClass, PsiMethod newEqualsMethod, String methodName) {
-    PsiMethod existingEqualsMethod = findMethod(psiClass, methodName);
+  protected PsiElement addOrReplaceMethod(PsiClass psiClass, PsiMethod newMethod, String methodName) {
+    PsiMethod existingMethod = findMethod(psiClass, methodName);
 
     PsiElement method;
-    if (existingEqualsMethod != null) {
-      method = existingEqualsMethod.replace(newEqualsMethod);
+    if (existingMethod != null) {
+      method = existingMethod.replace(newMethod);
     } else {
-      method = psiClass.add(newEqualsMethod);
+      method = psiClass.add(newMethod);
     }
     return method;
   }

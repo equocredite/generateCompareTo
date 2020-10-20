@@ -1,4 +1,4 @@
-package com.hartmanster.compareTo;
+package com.equocredite.GenerateCompareTo;
 
 import com.intellij.psi.PsiField;
 
@@ -34,9 +34,7 @@ public class PsiFieldWithSortOrder {
     PsiFieldWithSortOrder that = (PsiFieldWithSortOrder) o;
 
     if (ascending != that.ascending) return false;
-    if (!psiField.equals(that.psiField)) return false;
-
-    return true;
+    return psiField.equals(that.psiField);
   }
 
   @Override

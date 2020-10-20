@@ -1,12 +1,12 @@
-package com.hartmanster.compareTo.ui;
+package com.equocredite.GenerateCompareTo.ui;
 
-import com.hartmanster.compareTo.PsiFieldWithSortOrder;
-import com.hartmanster.compareTo.bindings.ClassNameColumnInfo;
-import com.hartmanster.compareTo.bindings.SortOrderColumnInfo;
+import com.equocredite.GenerateCompareTo.bindings.SortOrderColumnInfo;
+import com.equocredite.GenerateCompareTo.PsiFieldWithSortOrder;
+import com.equocredite.GenerateCompareTo.bindings.ClassNameColumnInfo;
+import com.equocredite.GenerateCompareTo.PsiComparabilityUtil;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
+import com.intellij.psi.*;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
@@ -25,9 +25,11 @@ public class GenerateDialog extends DialogWrapper {
     setTitle(dialogTitle);
 
     PsiField[] fields = psiClass.getAllFields();
-    List<PsiFieldWithSortOrder> sortOrders = new ArrayList<PsiFieldWithSortOrder>(fields.length);
+    List<PsiFieldWithSortOrder> sortOrders = new ArrayList<>(fields.length);
     for (PsiField field : fields) {
-      sortOrders.add(new PsiFieldWithSortOrder(field, true));
+      if (PsiComparabilityUtil.isComparable(field.getType())) {
+        sortOrders.add(new PsiFieldWithSortOrder(field, true));
+      }
     }
 
     ColumnInfo[] columnInfos = {new SortOrderColumnInfo("Sort order"), new ClassNameColumnInfo("Class name")};
