@@ -6,7 +6,7 @@ import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 
 public class PsiComparabilityUtil {
-    private static final PsiPrimitiveType[] primitiveComparableTypes = {
+    private static final PsiPrimitiveType[] PRIMITIVE_COMPARABLE_TYPES = {
             PsiPrimitiveType.CHAR,
             PsiPrimitiveType.BYTE,
             PsiPrimitiveType.SHORT,
@@ -17,7 +17,7 @@ public class PsiComparabilityUtil {
     };
 
     public static boolean isPrimitiveComparable(PsiType type) {
-        for (PsiPrimitiveType primitiveType : primitiveComparableTypes) {
+        for (PsiPrimitiveType primitiveType : PRIMITIVE_COMPARABLE_TYPES) {
             if (primitiveType.equals(type)) {
                 return true;
             }
@@ -25,7 +25,7 @@ public class PsiComparabilityUtil {
         return false;
     }
 
-    public static boolean implementsComparable(PsiClass psiClass) {
+    public static boolean psiClassImplementsComparable(PsiClass psiClass) {
         for (PsiClassType implementsListType : psiClass.getImplementsListTypes()) {
             PsiClass resolvedClass = implementsListType.resolve();
             if (resolvedClass != null && "java.lang.Comparable".equals(resolvedClass.getQualifiedName())) {
@@ -35,13 +35,10 @@ public class PsiComparabilityUtil {
         return false;
     }
 
-    public static boolean isComparable(PsiType type) {
-        if (isPrimitiveComparable(type)) {
-            return true;
-        }
+    public static boolean psiTypeImplementsComparable(PsiType type) {
         if (type instanceof PsiClassType) {
             PsiClassType psiClassType = (PsiClassType)type;
-            return implementsComparable(psiClassType.resolve());
+            return psiClassImplementsComparable(psiClassType.resolve());
         }
         return false;
     }

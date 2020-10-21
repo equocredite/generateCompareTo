@@ -9,9 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SortOrderColumnInfoCellRendererEditor extends AbstractTableCellEditor implements
-    TableCellRenderer {
-
+public class SortOrderColumnInfoCellRendererEditor extends AbstractTableCellEditor implements TableCellRenderer {
     private final JRadioButton ascendingOrderButton;
     private final JRadioButton descendingOrderButton;
     private final JPanel buttonPanel;

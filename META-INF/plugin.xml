@@ -31,7 +31,7 @@
   <actions>
     <!-- Add your actions here -->
       <action id="generateCompareTo" class="com.equocredite.GenerateCompareTo.GenerateCompareToAction"
-              text="compareTo()"
+              text="Generate compareTo()"
               description="Generates a compareTo() method">
           <add-to-group group-id="GenerateGroup" anchor="last"/>
       </action>

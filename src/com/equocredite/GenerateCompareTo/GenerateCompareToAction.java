@@ -24,7 +24,7 @@ public class GenerateCompareToAction extends AnAction {
   private final String dialogTitle;
 
   public GenerateCompareToAction() {
-    this("Generate compareTo()", "Generate compareTo()");
+    this("compareTo()", "Generate compareTo()");
   }
 
   public GenerateCompareToAction(String text, String dialogTitle) {
@@ -57,7 +57,7 @@ public class GenerateCompareToAction extends AnAction {
    */
   private void generateImplementsComparable(PsiClass psiClass) {
 
-    if (!PsiComparabilityUtil.implementsComparable(psiClass)) {
+    if (!PsiComparabilityUtil.psiClassImplementsComparable(psiClass)) {
       String comparableText = "Comparable<" + psiClass.getName() + ">";
       PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
       PsiJavaCodeReferenceElement referenceElement = elementFactory.createReferenceFromText(comparableText, psiClass);
@@ -65,7 +65,7 @@ public class GenerateCompareToAction extends AnAction {
     }
   }
 
-  private static final String[][] comparisonOrder = {{"<", ">"}, {">", "<"}};
+  private static final String[][] COMPARISON_ORDER = {{"<", ">"}, {">", "<"}};
 
   /**
    * Generates the compare to method for the class
@@ -77,10 +77,11 @@ public class GenerateCompareToAction extends AnAction {
     builder.append("public int compareTo(").append(psiClass.getName()).append(" that) { \n");
 
     for (int i = 0; i < fields.size(); i++) {
-      PsiField field = fields.get(i).getPsiField();
-      boolean ascending = fields.get(i).isAscending();
+      PsiFieldWithSortOrder psiFieldWithSortOrder = fields.get(i);
+      PsiField field = psiFieldWithSortOrder.getPsiField();
+      boolean ascending = psiFieldWithSortOrder.isAscending();
       int index = ascending ? 0 : 1;
-      String[] comparisons = comparisonOrder[index];
+      String[] comparisons = COMPARISON_ORDER[index];
       PsiType type = field.getType();
 
       if (i != 0) {
@@ -94,6 +95,14 @@ public class GenerateCompareToAction extends AnAction {
         builder.append("  return 1;\n");
         builder.append("}\n");
       } else {
+        if (psiFieldWithSortOrder.isNullable()) {
+          builder.append("if (this." + field.getName() + " == null && that." + field.getName() + " == null) {\n");
+          builder.append("  // pass\n");
+          builder.append("} else if (this." + field.getName() + " == null && that." + field.getName() + " != null) {\n");
+          builder.append("  return " + (ascending ? "-1;\n" : "1;\n"));
+          builder.append("} else if (this." + field.getName() + " != null && that." + field.getName() + " == null) {\n");
+          builder.append("  return " + (ascending ? "1;\n} else " : "-1;\n} else "));
+        }
         builder.append("if (this." + field.getName() + ".compareTo(that." + field.getName() + ") " + comparisons[0] + " 0) {\n");
         builder.append("  return -1;\n");
         builder.append("} else if (this." + field.getName() + ".compareTo(that." + field.getName() + ") " + comparisons[1] + " 0) {\n");
