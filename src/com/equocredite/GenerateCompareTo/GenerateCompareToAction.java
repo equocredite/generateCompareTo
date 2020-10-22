@@ -57,7 +57,7 @@ public class GenerateCompareToAction extends AnAction {
    */
   private void generateImplementsComparable(PsiClass psiClass) {
 
-    if (!PsiComparabilityUtil.psiClassImplementsComparable(psiClass)) {
+    if (!PsiUtil.psiClassImplementsComparable(psiClass)) {
       String comparableText = "Comparable<" + psiClass.getName() + ">";
       PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
       PsiJavaCodeReferenceElement referenceElement = elementFactory.createReferenceFromText(comparableText, psiClass);
@@ -65,7 +65,7 @@ public class GenerateCompareToAction extends AnAction {
     }
   }
 
-  private static final String[][] COMPARISON_ORDER = {{"<", ">"}, {">", "<"}};
+  private static final String[] COMPARISON_ORDER = {"<", ">"};
 
   /**
    * Generates the compare to method for the class
@@ -81,18 +81,15 @@ public class GenerateCompareToAction extends AnAction {
       PsiField field = psiFieldWithSortOrder.getPsiField();
       boolean ascending = psiFieldWithSortOrder.isAscending();
       int index = ascending ? 0 : 1;
-      String[] comparisons = COMPARISON_ORDER[index];
       PsiType type = field.getType();
 
       if (i != 0) {
         builder.append("\n");
       }
 
-      if (PsiComparabilityUtil.isPrimitiveComparable(type)) {
-        builder.append("if (this." + field.getName() + " " + comparisons[0] + " that." + field.getName() + ")" + " {\n");
-        builder.append("  return -1;\n");
-        builder.append("} else if (this." + field.getName() + " " + comparisons[1] + " that." + field.getName()+ ") {\n");
-        builder.append("  return 1;\n");
+      if (PsiUtil.isPrimitiveComparable(type)) {
+        builder.append("if (this." + field.getName() + " != " + "that." + field.getName() + ") {\n");
+        builder.append("\treturn (this." + field.getName() + " - that." + field.getName() + " " + COMPARISON_ORDER[index] + " 0 ? -1 : 1);\n");
         builder.append("}\n");
       } else {
         if (psiFieldWithSortOrder.isNullable()) {
@@ -103,14 +100,12 @@ public class GenerateCompareToAction extends AnAction {
           builder.append("} else if (this." + field.getName() + " != null && that." + field.getName() + " == null) {\n");
           builder.append("  return " + (ascending ? "1;\n} else " : "-1;\n} else "));
         }
-        builder.append("if (this." + field.getName() + ".compareTo(that." + field.getName() + ") " + comparisons[0] + " 0) {\n");
-        builder.append("  return -1;\n");
-        builder.append("} else if (this." + field.getName() + ".compareTo(that." + field.getName() + ") " + comparisons[1] + " 0) {\n");
-        builder.append("  return 1;\n");
+        builder.append("if (this." + field.getName() + ".compareTo(that." + field.getName() + ") != 0) {\n");
+        builder.append("\treturn (this." + field.getName() + ".compareTo(that." + field.getName() + ") " + COMPARISON_ORDER[index] + " 0 ? -1 : 1);\n");
         builder.append("}\n");
       }
     }
-    builder.append("return 0;\n");
+    builder.append("\nreturn 0;\n");
     builder.append("}\n");
 
     setNewMethod(psiClass, builder.toString(), "compareTo");

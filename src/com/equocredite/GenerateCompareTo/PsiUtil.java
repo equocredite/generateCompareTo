@@ -1,11 +1,30 @@
 package com.equocredite.GenerateCompareTo;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
+import com.intellij.openapi.util.text.StringUtil;
 
-public class PsiComparabilityUtil {
+public class PsiUtil {
+    public static boolean fieldIsStatic(PsiField field) {
+        return field.getModifierList().hasModifierProperty(PsiModifier.STATIC);
+    }
+
+    private static final String[] NOTNULL_ANNOTATIONS = {"notnull", "nonnull"};
+
+    public static boolean fieldAnnotatedNotNull(PsiField field) {
+        PsiModifierList modifierList = field.getModifierList();
+        if (modifierList != null) {
+            for (PsiAnnotation psiAnnotation : modifierList.getAnnotations()) {
+                String shortName = StringUtil.getShortName(psiAnnotation.getQualifiedName()).toLowerCase();
+                for (String annotation : NOTNULL_ANNOTATIONS) {
+                    if (annotation.equals(shortName)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     private static final PsiPrimitiveType[] PRIMITIVE_COMPARABLE_TYPES = {
             PsiPrimitiveType.CHAR,
             PsiPrimitiveType.BYTE,

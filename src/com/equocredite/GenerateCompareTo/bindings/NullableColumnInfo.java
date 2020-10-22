@@ -1,11 +1,9 @@
 package com.equocredite.GenerateCompareTo.bindings;
 
-import com.equocredite.GenerateCompareTo.PsiComparabilityUtil;
 import com.equocredite.GenerateCompareTo.PsiFieldWithSortOrder;
 import com.equocredite.GenerateCompareTo.ui.NullableColumnInfoCellRendererEditor;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.util.ui.ColumnInfo;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
