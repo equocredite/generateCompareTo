@@ -10,9 +10,9 @@ public class PsiFieldWithSortOrder {
   @NotNull
   private final PsiField psiField;
   private boolean ascending;
-  private boolean nullable;
+  private Boolean nullable;
 
-  public PsiFieldWithSortOrder(@NotNull PsiField psiField, boolean ascending, boolean nullable) {
+  public PsiFieldWithSortOrder(@NotNull PsiField psiField, boolean ascending, Boolean nullable) {
     this.psiField = psiField;
     this.ascending = ascending;
     this.nullable = nullable;
@@ -26,7 +26,7 @@ public class PsiFieldWithSortOrder {
     return ascending;
   }
 
-  public boolean isNullable() {
+  public Boolean isNullable() {
     return nullable;
   }
 
@@ -34,7 +34,7 @@ public class PsiFieldWithSortOrder {
     this.ascending = ascending;
   }
 
-  public void setNullable(boolean nullable) {
+  public void setNullable(Boolean nullable) {
     this.nullable = nullable;
   }
 

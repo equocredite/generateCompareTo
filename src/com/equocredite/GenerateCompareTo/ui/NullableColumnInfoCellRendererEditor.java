@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 public class NullableColumnInfoCellRendererEditor extends AbstractTableCellEditor implements TableCellRenderer {
     private final JCheckBox nullableButton = new JCheckBox();
     private final JPanel buttonPanel = new JPanel();
+    private final JPanel emptyPanel = new JPanel();
 
     public NullableColumnInfoCellRendererEditor() {
         nullableButton.setSelected(true);
@@ -20,9 +21,11 @@ public class NullableColumnInfoCellRendererEditor extends AbstractTableCellEdito
         nullableButton.addActionListener(new StopTableEditingActionListener(buttonPanel));
     }
 
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                   boolean cellHasFocus, int row, int col) {
+    private Component getPanel(Object value) {
+        if (value == null) {
+            nullableButton.setSelected(Boolean.FALSE);
+            return emptyPanel;
+        }
         if (!getCellEditorValue().equals(value)) {
             nullableButton.setSelected(Boolean.TRUE.equals(value));
         }
@@ -30,11 +33,14 @@ public class NullableColumnInfoCellRendererEditor extends AbstractTableCellEdito
     }
 
     @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                   boolean cellHasFocus, int row, int col) {
+        return getPanel(value);
+    }
+
+    @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean b, int i, int i2) {
-        if (!getCellEditorValue().equals(value)) {
-            nullableButton.setSelected(Boolean.TRUE.equals(value));
-        }
-        return buttonPanel;
+        return getPanel(value);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class GenerateDialog extends DialogWrapper {
         continue;
       }
       if (PsiUtil.isPrimitiveComparable(field.getType())) {
-        sortOrders.add(new PsiFieldWithSortOrder(field, true, false));
+        sortOrders.add(new PsiFieldWithSortOrder(field, true, null));
       } else if (PsiUtil.psiTypeImplementsComparable(field.getType())) {
         sortOrders.add(new PsiFieldWithSortOrder(field, true, !PsiUtil.fieldAnnotatedNotNull(field)));
       }
