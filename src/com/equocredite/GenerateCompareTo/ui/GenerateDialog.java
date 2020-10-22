@@ -11,7 +11,6 @@ import com.intellij.psi.*;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

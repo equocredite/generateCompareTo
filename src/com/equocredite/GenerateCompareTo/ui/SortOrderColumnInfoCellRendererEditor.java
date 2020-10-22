@@ -1,79 +1,24 @@
 package com.equocredite.GenerateCompareTo.ui;
 
-import com.intellij.util.ui.AbstractTableCellEditor;
-
 import javax.swing.*;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class SortOrderColumnInfoCellRendererEditor extends AbstractTableCellEditor implements TableCellRenderer {
-    private final JRadioButton ascendingOrderButton;
-    private final JRadioButton descendingOrderButton;
-    private final JPanel buttonPanel;
-
+public class SortOrderColumnInfoCellRendererEditor extends ToggleCellRendererEditor {
     public SortOrderColumnInfoCellRendererEditor() {
-      this.ascendingOrderButton = new JRadioButton("asc");
-      ascendingOrderButton.setSelected(true);
-
-      descendingOrderButton = new JRadioButton("desc");
-      descendingOrderButton.setSelected(false);
-
+      super(new JRadioButton[]{new JRadioButton("asc"), new JRadioButton("desc")});
+      buttons[0].setSelected(true);
+      buttons[1].setSelected(false);
       ButtonGroup buttonGroup = new ButtonGroup();
-      buttonGroup.add(ascendingOrderButton);
-      buttonGroup.add(descendingOrderButton);
-
-      buttonPanel = new JPanel();
-      buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-
-      buttonPanel.add(ascendingOrderButton);
-      buttonPanel.add(descendingOrderButton);
-
-      ascendingOrderButton.addActionListener(new StopTableEditingActionListener(buttonPanel));
-      descendingOrderButton.addActionListener(new StopTableEditingActionListener(buttonPanel));
-
+      buttonGroup.add(buttons[0]);
+      buttonGroup.add(buttons[1]);
     }
 
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                   boolean cellHasFocus, int row, int col) {
-      if (!getCellEditorValue().equals(value)) {
-        ascendingOrderButton.setSelected(Boolean.TRUE.equals(value));
-        descendingOrderButton.setSelected(Boolean.FALSE.equals(value));
-      }
-      return buttonPanel;
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable jTable, Object value, boolean b, int i, int i2) {
-      if (!getCellEditorValue().equals(value)) {
-        ascendingOrderButton.setSelected(Boolean.TRUE.equals(value));
-        descendingOrderButton.setSelected(Boolean.FALSE.equals(value));
-      }
-      return buttonPanel;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-      return ascendingOrderButton.isSelected();
-    }
-
-    private static class StopTableEditingActionListener implements ActionListener {
-      private final JPanel buttonPanel;
-
-      private StopTableEditingActionListener(JPanel buttonPanel) {
-        this.buttonPanel = buttonPanel;
-      }
-
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        MyTable parentTable = (MyTable) buttonPanel.getParent();
-        TableCellEditor editor = parentTable.getCellEditor();
-        if (editor != null) {
-          editor.stopCellEditing();
+    protected Component getPanel(Object value) {
+        if (!getCellEditorValue().equals(value)) {
+            buttons[0].setSelected(Boolean.TRUE.equals(value));
+            buttons[1].setSelected(Boolean.FALSE.equals(value));
         }
-      }
+        return buttonPanel;
     }
   }
