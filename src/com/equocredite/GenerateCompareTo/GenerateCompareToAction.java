@@ -89,7 +89,8 @@ public class GenerateCompareToAction extends AnAction {
 
       if (PsiUtil.isPrimitiveComparable(type)) {
         builder.append("if (this." + field.getName() + " != " + "that." + field.getName() + ") {\n");
-        builder.append("\treturn (this." + field.getName() + " - that." + field.getName() + " " + COMPARISON_ORDER[index] + " 0 ? -1 : 1);\n");
+        // possible overflow if subtract
+        builder.append("\treturn (this." + field.getName() + " " + COMPARISON_ORDER[index] + " that." + field.getName() + " ? -1 : 1);\n");
         builder.append("}\n");
       } else {
         if (psiFieldWithSortOrder.isNullable()) {
