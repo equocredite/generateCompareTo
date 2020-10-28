@@ -6,11 +6,10 @@ Adds a new `Generate -> compareTo()` action to the class context menu that eithe
 
 ![generate group](./screenshots/generate_group.png)
 
-The order it induces is a lexicographic order based on non-static fields of our class that are of comparable types, i.e. either primitive or which themselves implement the interface `Comparable`.
+The order it induces is a lexicographic order based on all non-static fields of our class that are of comparable types, i.e. either primitive or which themselves implement the interface `Comparable`. For  nullable fields `null` will be treated as the least value of that type. 
 
 In the following dialog, you can customize the behaviour:
-* Select the fields that you want to be used, and in which sequence.
-* For each of them, you can specify whether you want this field to be compared in ascending or descending order. 
-* Additionally, for each field of a non-primitive type, you can specify whether it's nullable -- in that case, `null` will be treated as the least value of that type. The default behaviour is deduced from the presence or absence of `@NotNull`/`@NonNull` annotations.
-
-![dialog](./screenshots/dialog_.png)
+* Select the fields to use
+* For each of them, in which order -- ascending or descending.
+* Specify nullability for each field of a non-primitive type. The default is deduced from the presence or absence of `@NotNull`/`@NonNull` annotations. 
+![dialog_](./screenshots/dialog_.png)
