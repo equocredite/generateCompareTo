@@ -3,12 +3,13 @@ package com.equocredite.generateCompareTo;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Tuple describing the PsiField and whether or not the field should be sorted in ascending or descending order
+ * PsiField with sort order and nullability
  */
 public class PsiFieldWithComparisonPolicy {
   @NotNull
@@ -22,6 +23,10 @@ public class PsiFieldWithComparisonPolicy {
     this.nullable = nullable;
   }
 
+  /**
+   * returns null if the field cannot be compared, or is static and therefore it's pointless to compare it
+   */
+  @Nullable
   public static PsiFieldWithComparisonPolicy constructDefaultPolicy(@NotNull PsiField psiField) {
     if (!PsiUtil.fieldIsStatic(psiField)) {
       if (PsiUtil.isPrimitiveComparable(psiField.getType())) {

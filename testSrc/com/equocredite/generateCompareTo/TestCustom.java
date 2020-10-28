@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Select only a custom set of fields / compare them not necessarily in ascending order / customize nullability
+ */
 public class TestCustom extends TestWithMockJdk {
     private void compareFiles(String testName, List<String> fieldNames, List<Boolean> ascendingOptions, List<Boolean> nullableOptions) {
         myFixture.configureByFile(testName + "/before.java");
