@@ -13,4 +13,4 @@ In the following dialog, you can customize the behaviour:
 * For each of them, you can specify whether you want this field to be compared in ascending or descending order. 
 * Additionally, for each field of a non-primitive type, you can specify whether it's nullable -- in that case, `null` will be treated as the least value of that type. The default behaviour is deduced from the presence or absence of `@NotNull`/`@NonNull` annotations.
 
-![dialog](./screenshots/dialog.png)
+![dialog](./screenshots/dialog_.png)
