@@ -1,6 +1,6 @@
-package com.equocredite.GenerateCompareTo;
+package com.equocredite.generateCompareTo;
 
-import com.equocredite.GenerateCompareTo.ui.GenerateDialog;
+import com.equocredite.generateCompareTo.ui.GenerateDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -10,7 +10,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -35,14 +34,15 @@ public class GenerateCompareToAction extends AnAction {
 
   public void actionPerformed(AnActionEvent e) {
     PsiClass psiClass = getPsiClassFromContext(e);
-    GenerateDialog dlg = new GenerateDialog(psiClass, dialogTitle);
+    GenerateDialog dlg = new GenerateDialog(psiClass.getProject(),
+            PsiFieldWithComparisonPolicy.constructDefaultPoliciesForFields(psiClass), dialogTitle);
     dlg.show();
     if (dlg.isOK()) {
       generate(psiClass, dlg.getFields());
     }
   }
 
-  public void generate(final PsiClass psiClass, final List<PsiFieldWithSortOrder> fields) {
+  public void generate(final PsiClass psiClass, final List<PsiFieldWithComparisonPolicy> fields) {
     new WriteCommandAction.Simple(psiClass.getProject(), psiClass.getContainingFile()) {
       @Override
       protected void run() throws Throwable {
@@ -73,14 +73,14 @@ public class GenerateCompareToAction extends AnAction {
    * @param psiClass
    * @param fields
    */
-  private void generateCompareTo(PsiClass psiClass, List<PsiFieldWithSortOrder> fields) {
+  private void generateCompareTo(PsiClass psiClass, List<PsiFieldWithComparisonPolicy> fields) {
     StringBuilder builder = new StringBuilder("@Override\n");
     builder.append("public int compareTo(").append(psiClass.getName()).append(" that) { \n");
 
     for (int i = 0; i < fields.size(); i++) {
-      PsiFieldWithSortOrder psiFieldWithSortOrder = fields.get(i);
-      PsiField field = psiFieldWithSortOrder.getPsiField();
-      boolean ascending = psiFieldWithSortOrder.isAscending();
+      PsiFieldWithComparisonPolicy psiFieldWithComparisonPolicy = fields.get(i);
+      PsiField field = psiFieldWithComparisonPolicy.getPsiField();
+      boolean ascending = psiFieldWithComparisonPolicy.isAscending();
       int index = ascending ? 0 : 1;
       PsiType type = field.getType();
 
@@ -94,7 +94,7 @@ public class GenerateCompareToAction extends AnAction {
         builder.append("\treturn (this." + field.getName() + " " + COMPARISON_ORDER[index] + " that." + field.getName() + " ? -1 : 1);\n");
         builder.append("}\n");
       } else {
-        if (psiFieldWithSortOrder.isNullable()) {
+        if (psiFieldWithComparisonPolicy.isNullable()) {
           builder.append("if (this." + field.getName() + " == null && that." + field.getName() + " == null) {\n");
           builder.append("  // pass\n");
           builder.append("} else if (this." + field.getName() + " == null && that." + field.getName() + " != null) {\n");

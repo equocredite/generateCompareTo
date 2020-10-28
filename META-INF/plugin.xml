@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-  <id>com.equocredite.GenerateCompareTo</id>
+  <id>com.equocredite.generateCompareTo</id>
   <name>Generate compareTo</name>
   <version>1.0</version>
   <vendor email="equocredite@gmail.com" url="https://github.com/equocredite">equocredite</vendor>
@@ -30,7 +30,7 @@
 
   <actions>
     <!-- Add your actions here -->
-      <action id="generateCompareTo" class="com.equocredite.GenerateCompareTo.GenerateCompareToAction"
+      <action id="generateCompareTo" class="com.equocredite.generateCompareTo.GenerateCompareToAction"
               text="Generate compareTo()"
               description="Generates a compareTo() method">
           <add-to-group group-id="GenerateGroup" anchor="last"/>

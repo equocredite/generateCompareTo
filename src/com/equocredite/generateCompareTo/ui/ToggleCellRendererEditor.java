@@ -1,4 +1,4 @@
-package com.equocredite.GenerateCompareTo.ui;
+package com.equocredite.generateCompareTo.ui;
 
 import com.intellij.util.ui.AbstractTableCellEditor;
 

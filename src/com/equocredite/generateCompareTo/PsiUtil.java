@@ -1,7 +1,11 @@
-package com.equocredite.GenerateCompareTo;
+package com.equocredite.generateCompareTo;
 
 import com.intellij.psi.*;
 import com.intellij.openapi.util.text.StringUtil;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PsiUtil {
     public static boolean fieldIsStatic(PsiField field) {
@@ -44,9 +48,10 @@ public class PsiUtil {
         return false;
     }
 
-    public static boolean psiClassImplementsComparable(PsiClass psiClass) {
+    public static boolean psiClassImplementsComparable(@NotNull PsiClass psiClass) {
         for (PsiClassType implementsListType : psiClass.getImplementsListTypes()) {
             PsiClass resolvedClass = implementsListType.resolve();
+
             if (resolvedClass != null && "java.lang.Comparable".equals(resolvedClass.getQualifiedName())) {
                 return true;
             }
@@ -54,7 +59,7 @@ public class PsiUtil {
         return false;
     }
 
-    public static boolean psiTypeImplementsComparable(PsiType type) {
+    public static boolean psiTypeImplementsComparable(@NotNull PsiType type) {
         if (type instanceof PsiClassType) {
             PsiClassType psiClassType = (PsiClassType)type;
             return psiClassImplementsComparable(psiClassType.resolve());
