@@ -1,6 +1,6 @@
-package com.equocredite.GenerateCompareTo.bindings;
+package com.equocredite.generateCompareTo.bindings;
 
-import com.equocredite.GenerateCompareTo.PsiFieldWithSortOrder;
+import com.equocredite.generateCompareTo.PsiFieldWithComparisonPolicy;
 import com.intellij.ide.util.DefaultPsiElementCellRenderer;
 import com.intellij.util.ui.ColumnInfo;
 import org.jetbrains.annotations.Nullable;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * ColumnInfo for rendering the class name
  */
-public class ClassNameColumnInfo extends ColumnInfo<PsiFieldWithSortOrder, String> {
+public class ClassNameColumnInfo extends ColumnInfo<PsiFieldWithComparisonPolicy, String> {
   private final DefaultPsiElementCellRenderer psiFieldWithSortOrderCellRenderer
       = new DefaultPsiElementCellRenderer();
 
@@ -18,7 +18,7 @@ public class ClassNameColumnInfo extends ColumnInfo<PsiFieldWithSortOrder, Strin
 
   @Nullable
   @Override
-  public String valueOf(PsiFieldWithSortOrder psiFieldWithSortOrder) {
-    return psiFieldWithSortOrder.getPsiField().getName();
+  public String valueOf(PsiFieldWithComparisonPolicy psiFieldWithComparisonPolicy) {
+    return psiFieldWithComparisonPolicy.getPsiField().getName();
   }
 }
