@@ -8,6 +8,7 @@ import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -25,8 +26,8 @@ public class GenerateDialog extends DialogWrapper {
             new ClassNameColumnInfo("Class name"),
             new SortOrderColumnInfo("Sort order"),
             new NullableColumnInfo("Nullable"),
-            new UseGetterColumnInfo("Use getter"),
-            new NullIsLeastColumnInfo("Treat null as")
+            new NullIsLeastColumnInfo("Treat null as"),
+            new UseGetterColumnInfo("Use getter")
     };
     myFields = new ListTableModel<PsiFieldWithComparisonPolicy>(columnInfos, policies, 0);
 

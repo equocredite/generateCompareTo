@@ -9,8 +9,11 @@ Adds a new `Generate -> compareTo()` action to the class context menu that eithe
 The order it induces is a lexicographic order based on all non-static fields of our class that are of comparable types, i.e. either primitive or which themselves implement the interface `Comparable`. For  nullable fields `null` will be treated as the least value of that type.
 
 In the following dialog, you can customize the behaviour:
-* Select the fields to use
-* For each of them, in which order -- ascending or descending.
-* Specify nullability for each field of a non-primitive type. The default is deduced from the presence or absence of `@NotNull`/`@NonNull` annotations.
+* Select the fields to use.
+* For each of them, in which order - ascending or descending.
+* Specify nullability for each field of a non-primitive type. 
+    * The default is deduced from the presence or absence of `@NotNull`/`@NonNull` annotations.
+    * You can also specify whether `null` should me considered the minimum or the maximum value of that type.
+* Use getter, if there is one, instead of referencing the field directly.
 
-![dialog_](./screenshots/dialog_.png)
+![dialog_](./screenshots/dialog.png)
