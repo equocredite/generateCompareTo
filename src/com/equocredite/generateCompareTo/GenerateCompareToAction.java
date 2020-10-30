@@ -78,9 +78,20 @@ public class GenerateCompareToAction extends AnAction {
     builder.append("public int compareTo(").append(psiClass.getName()).append(" that) { \n");
 
     for (int i = 0; i < fields.size(); i++) {
-      PsiFieldWithComparisonPolicy psiFieldWithComparisonPolicy = fields.get(i);
-      PsiField field = psiFieldWithComparisonPolicy.getPsiField();
-      boolean ascending = psiFieldWithComparisonPolicy.isAscending();
+      PsiFieldWithComparisonPolicy policy = fields.get(i);
+      PsiField field = policy.getPsiField();
+
+      String thisName;
+      String thatName;
+      if (policy.getUseGetterOption() == Boolean.TRUE) {
+        thisName = "this." + policy.getGetter().getName() + "()";
+        thatName = "that." + policy.getGetter().getName() + "()";
+      } else {
+        thisName = "this." + field.getName();
+        thatName = "that." + field.getName();
+      }
+
+      boolean ascending = policy.isAscending();
       int index = ascending ? 0 : 1;
       PsiType type = field.getType();
 
@@ -89,21 +100,21 @@ public class GenerateCompareToAction extends AnAction {
       }
 
       if (PsiUtil.isPrimitiveComparable(type)) {
-        builder.append("if (this." + field.getName() + " != " + "that." + field.getName() + ") {\n");
+        builder.append("if (" + thisName + " != " + thatName + ") {\n");
         // possible overflow if subtract
-        builder.append("\treturn (this." + field.getName() + " " + COMPARISON_ORDER[index] + " that." + field.getName() + " ? -1 : 1);\n");
+        builder.append("\treturn (" + thisName + " " + COMPARISON_ORDER[index] + " " + thatName + " ? -1 : 1);\n");
         builder.append("}\n");
       } else {
-        if (psiFieldWithComparisonPolicy.isNullable()) {
-          builder.append("if (this." + field.getName() + " == null && that." + field.getName() + " == null) {\n");
+        if (policy.isNullable()) {
+          builder.append("if (" + thisName + " == null && " + thatName + " == null) {\n");
           builder.append("  // pass\n");
-          builder.append("} else if (this." + field.getName() + " == null && that." + field.getName() + " != null) {\n");
+          builder.append("} else if (" + thisName + " == null && " + thatName + " != null) {\n");
           builder.append("  return " + (ascending ? "-1;\n" : "1;\n"));
-          builder.append("} else if (this." + field.getName() + " != null && that." + field.getName() + " == null) {\n");
+          builder.append("} else if (" + thisName + " != null && " + thatName + " == null) {\n");
           builder.append("  return " + (ascending ? "1;\n} else " : "-1;\n} else "));
         }
-        builder.append("if (this." + field.getName() + ".compareTo(that." + field.getName() + ") != 0) {\n");
-        builder.append("\treturn (this." + field.getName() + ".compareTo(that." + field.getName() + ") " + COMPARISON_ORDER[index] + " 0 ? -1 : 1);\n");
+        builder.append("if (" + thisName + ".compareTo(" + thatName + ") != 0) {\n");
+        builder.append("\treturn (" + thisName + ".compareTo(" + thatName + ") " + COMPARISON_ORDER[index] + " 0 ? -1 : 1);\n");
         builder.append("}\n");
       }
     }

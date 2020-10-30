@@ -28,4 +28,8 @@ public class TestDefault extends TestWithMockJdk {
     public void testCheckComparability() {
         compareFiles(getTestName(false));
     }
+
+    public void testUseGetters() {
+        compareFiles(getTestName(false));
+    }
 }

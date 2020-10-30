@@ -1,7 +1,7 @@
 package com.equocredite.generateCompareTo.bindings;
 
 import com.equocredite.generateCompareTo.PsiFieldWithComparisonPolicy;
-import com.equocredite.generateCompareTo.ui.NullableColumnInfoCellRendererEditor;
+import com.equocredite.generateCompareTo.ui.OptionalCheckBoxRendererEditor;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.util.ui.ColumnInfo;
 
@@ -9,8 +9,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 public class NullableColumnInfo extends ColumnInfo<PsiFieldWithComparisonPolicy, Boolean> {
-    private final NullableColumnInfoCellRendererEditor rendererEditor =
-            new NullableColumnInfoCellRendererEditor();
+    private final OptionalCheckBoxRendererEditor rendererEditor = new OptionalCheckBoxRendererEditor();
 
     public NullableColumnInfo(String name) {
         super(name);

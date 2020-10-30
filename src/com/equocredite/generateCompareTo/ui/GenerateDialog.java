@@ -1,13 +1,10 @@
 package com.equocredite.generateCompareTo.ui;
 
-import com.equocredite.generateCompareTo.bindings.NullableColumnInfo;
-import com.equocredite.generateCompareTo.bindings.SortOrderColumnInfo;
+import com.equocredite.generateCompareTo.bindings.*;
 import com.equocredite.generateCompareTo.PsiFieldWithComparisonPolicy;
-import com.equocredite.generateCompareTo.bindings.ClassNameColumnInfo;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.psi.*;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
@@ -27,13 +24,18 @@ public class GenerateDialog extends DialogWrapper {
     ColumnInfo[] columnInfos = {
             new ClassNameColumnInfo("Class name"),
             new SortOrderColumnInfo("Sort order"),
-            new NullableColumnInfo("Nullable")
+            new NullableColumnInfo("Nullable"),
+            new UseGetterColumnInfo("Use getter"),
+            new NullIsLeastColumnInfo("Treat null as")
     };
     myFields = new ListTableModel<PsiFieldWithComparisonPolicy>(columnInfos, policies, 0);
 
     MyTable jTable = new MyTable(myFields);
     jTable.setRowMargin(2);
     jTable.setRowHeight(20);
+    jTable.getColumnModel().getColumn(2).setPreferredWidth(40);
+    jTable.getColumnModel().getColumn(3).setPreferredWidth(40);
+    jTable.doLayout();
 
     ToolbarDecorator decorator = ToolbarDecorator.createDecorator(jTable);
     decorator.disableAddAction();

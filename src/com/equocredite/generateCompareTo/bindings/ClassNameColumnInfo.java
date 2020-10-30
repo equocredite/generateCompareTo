@@ -9,8 +9,7 @@ import org.jetbrains.annotations.Nullable;
  * ColumnInfo for rendering the class name
  */
 public class ClassNameColumnInfo extends ColumnInfo<PsiFieldWithComparisonPolicy, String> {
-  private final DefaultPsiElementCellRenderer psiFieldWithSortOrderCellRenderer
-      = new DefaultPsiElementCellRenderer();
+  private final DefaultPsiElementCellRenderer psiFieldWithSortOrderCellRenderer = new DefaultPsiElementCellRenderer();
 
   public ClassNameColumnInfo(String name) {
     super(name);

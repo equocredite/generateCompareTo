@@ -2,10 +2,12 @@ package com.equocredite.generateCompareTo;
 
 import com.intellij.psi.*;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.util.PropertyUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PsiUtil {
     public static boolean fieldIsStatic(PsiField field) {
@@ -65,5 +67,16 @@ public class PsiUtil {
             return psiClassImplementsComparable(psiClassType.resolve());
         }
         return false;
+    }
+
+    public static Map<PsiField, PsiMethod> getGetters(@NotNull PsiClass psiClass) {
+        Map<PsiField, PsiMethod> getters = new HashMap<>();
+        PsiMethod[] methods = psiClass.getMethods();
+        for (PsiMethod method : methods) {
+            if (PropertyUtil.isSimpleGetter(method)) {
+                getters.put(PropertyUtil.getFieldOfGetter(method), method);
+            }
+        }
+        return getters;
     }
 }

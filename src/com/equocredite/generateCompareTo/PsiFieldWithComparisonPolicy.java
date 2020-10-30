@@ -2,11 +2,12 @@ package com.equocredite.generateCompareTo;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * PsiField with sort order and nullability
@@ -16,35 +17,36 @@ public class PsiFieldWithComparisonPolicy {
   private final PsiField psiField;
   private boolean ascending;
   private Boolean nullable;
+  private Boolean nullIsLeast;
 
-  public PsiFieldWithComparisonPolicy(@NotNull PsiField psiField, boolean ascending, Boolean nullable) {
+  private final PsiMethod getter;
+  private Boolean useGetterOption;
+
+  public PsiFieldWithComparisonPolicy(@NotNull PsiField psiField, boolean ascending, Boolean nullable, Boolean nullIsLeast,
+                                      PsiMethod getter, Boolean useGetterOption) {
     this.psiField = psiField;
     this.ascending = ascending;
     this.nullable = nullable;
-  }
-
-  /**
-   * returns null if the field cannot be compared, or is static and therefore it's pointless to compare it
-   */
-  @Nullable
-  public static PsiFieldWithComparisonPolicy constructDefaultPolicy(@NotNull PsiField psiField) {
-    if (!PsiUtil.fieldIsStatic(psiField)) {
-      if (PsiUtil.isPrimitiveComparable(psiField.getType())) {
-        return new PsiFieldWithComparisonPolicy(psiField, true, null);
-      } else if (PsiUtil.psiTypeImplementsComparable(psiField.getType())) {
-        return new PsiFieldWithComparisonPolicy(psiField, true, !PsiUtil.fieldAnnotatedNotNull(psiField));
-      }
-    }
-    return null;
+    this.nullIsLeast = nullIsLeast;
+    this.getter = getter;
+    this.useGetterOption = useGetterOption;
   }
 
   public static List<PsiFieldWithComparisonPolicy> constructDefaultPoliciesForFields(@NotNull PsiClass psiClass) {
+    Map<PsiField, PsiMethod> getters = PsiUtil.getGetters(psiClass);
     PsiField[] psiFields = psiClass.getFields();
     List<PsiFieldWithComparisonPolicy> policies = new ArrayList<>(psiFields.length);
     for (PsiField psiField : psiFields) {
-      PsiFieldWithComparisonPolicy policy = constructDefaultPolicy(psiField);
-      if (policy != null) {
-        policies.add(policy);
+      if (PsiUtil.fieldIsStatic(psiField)) {
+        continue;
+      }
+      PsiMethod getter = getters.get(psiField);
+      Boolean useGetter = (getter == null ? null : true);
+      if (PsiUtil.isPrimitiveComparable(psiField.getType())) {
+        policies.add(new PsiFieldWithComparisonPolicy(psiField, true, null, null, getter, useGetter));
+      } else if (PsiUtil.psiTypeImplementsComparable(psiField.getType())) {
+        policies.add(new PsiFieldWithComparisonPolicy(psiField, true,
+                !PsiUtil.fieldAnnotatedNotNull(psiField), true, getter, useGetter));
       }
     }
     return policies;
@@ -62,12 +64,32 @@ public class PsiFieldWithComparisonPolicy {
     return nullable;
   }
 
+  public Boolean isNullLeast() {
+    return nullIsLeast;
+  }
+
+  public PsiMethod getGetter() {
+    return getter;
+  }
+
+  public Boolean getUseGetterOption() {
+    return useGetterOption;
+  }
+
   public void setAscending(boolean ascending) {
     this.ascending = ascending;
   }
 
   public void setNullable(Boolean nullable) {
     this.nullable = nullable;
+  }
+
+  public void setNullLeast(Boolean nullIsLeast) {
+    this.nullIsLeast = nullIsLeast;
+  }
+
+  public void setUseGetterOption(Boolean useGetterOption) {
+    this.useGetterOption = useGetterOption;
   }
 
   @Override

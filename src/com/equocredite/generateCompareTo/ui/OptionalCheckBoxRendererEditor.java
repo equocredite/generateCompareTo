@@ -3,10 +3,10 @@ package com.equocredite.generateCompareTo.ui;
 import javax.swing.*;
 import java.awt.*;
 
-public class NullableColumnInfoCellRendererEditor extends ToggleCellRendererEditor {
+public class OptionalCheckBoxRendererEditor extends ToggleCellRendererEditor {
     private final JPanel emptyPanel = new JPanel();
 
-    public NullableColumnInfoCellRendererEditor() {
+    public OptionalCheckBoxRendererEditor() {
         super(new JCheckBox[]{new JCheckBox()});
         buttons[0].setSelected(true);
     }

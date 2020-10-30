@@ -21,7 +21,8 @@ public class TestCustom extends TestWithMockJdk {
             String fieldName = fieldNames.get(i);
             Boolean ascending = ascendingOptions.get(i);
             Boolean nullable = nullableOptions.get(i);
-            policies.add(new PsiFieldWithComparisonPolicy(psiClass.findFieldByName(fieldName, false), ascending, nullable));
+            policies.add(new PsiFieldWithComparisonPolicy(psiClass.findFieldByName(fieldName, false),
+                    ascending, nullable, (nullable == null ? null : true), null, null));
         }
         new GenerateCompareToAction().generate(psiClass, policies);
         myFixture.checkResultByFile(testName + "/after.java");
