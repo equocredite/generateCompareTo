@@ -11,8 +11,8 @@ The order it induces is a lexicographic order based on all non-static fields of 
 In the following dialog, you can customize the behaviour:
 * Select the fields to use.
 * For each of them, in which order - ascending or descending.
-* Specify nullability for each field of a non-primitive type. 
-    * The default is deduced from the presence or absence of `@NotNull`/`@NonNull` annotations.
+* Specify nullability for each field of a non-primitive type.
+    * The default is deduced from the presence or absence of `@NotNull`/`@NonNull` annotations from any package.
     * You can also specify whether `null` should me considered the minimum or the maximum value of that type.
 * Use getter, if there is one, instead of referencing the field directly.
 
