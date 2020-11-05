@@ -1,4 +1,4 @@
-class MyClass implements Comparable<MyClass> {
+class MyClass {
     private static class NonComparableClass {}
     private static class ComparableClass implements Comparable<ComparableClass> {
         private final int x;

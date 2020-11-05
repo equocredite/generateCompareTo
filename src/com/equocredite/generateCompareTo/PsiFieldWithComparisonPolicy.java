@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * PsiField with sort order and nullability
- */
 public class PsiFieldWithComparisonPolicy {
   @NotNull
   private final PsiField psiField;

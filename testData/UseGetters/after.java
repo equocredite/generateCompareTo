@@ -10,9 +10,9 @@ class UseGetters implements Comparable<UseGetters> {
     public int compareTo(UseGetters that) {
         if (this.getFoo() == null && that.getFoo() == null) {
             // pass
-        } else if (this.getFoo() == null && that.getFoo() != null) {
+        } else if (this.getFoo() == null) {
             return -1;
-        } else if (this.getFoo() != null && that.getFoo() == null) {
+        } else if (that.getFoo() == null) {
             return 1;
         } else if (this.getFoo().compareTo(that.getFoo()) != 0) {
             return (this.getFoo().compareTo(that.getFoo()) < 0 ? -1 : 1);

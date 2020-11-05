@@ -3,9 +3,9 @@ class MyClass implements Comparable<MyClass> {
     public int compareTo(MyClass that) {
         if (this.comparableObject == null && that.comparableObject == null) {
             // pass
-        } else if (this.comparableObject == null && that.comparableObject != null) {
+        } else if (this.comparableObject == null) {
             return -1;
-        } else if (this.comparableObject != null && that.comparableObject == null) {
+        } else if (that.comparableObject == null) {
             return 1;
         } else if (this.comparableObject.compareTo(that.comparableObject) != 0) {
             return (this.comparableObject.compareTo(that.comparableObject) < 0 ? -1 : 1);

@@ -1,11 +1,25 @@
-<idea-plugin version="2">
+<idea-plugin url="https://github.com/equocredite/generateCompareTo">
   <id>com.equocredite.generateCompareTo</id>
   <name>Generate compareTo</name>
   <version>1.0</version>
   <vendor email="equocredite@gmail.com" url="https://github.com/equocredite">equocredite</vendor>
 
   <description><![CDATA[
-      Generates a compareTo() method for the class
+      Generates a compareTo() method for the class<br><br>
+
+      When inside a class, select the new action <b>Generate -> compareTo()</b> to generate a "lexicographic" comparison function based on non-static fields of the class.<br>
+      In the following dialog, you can customize the behavior:<br>
+      <ul>
+      <li> Select the fields to use. </li>
+      <li> For each of them, in which order - ascending or descending. </li>
+      <li> Specify nullability for each field of a non-primitive type.
+        <ul>
+        <li> The default is deduced from the presence or absence of <code>@NotNull</code>/<code>@NonNull</code> annotations from any package. </li>
+        <li> You can also specify whether null should me considered the minimum or the maximum value of that type. </li>
+        </ul>
+      </li>
+      <li> Use getter, if there is one, instead of referencing the field directly. </li>
+      </ul>
       ]]></description>
 
   <change-notes><![CDATA[]]>
@@ -15,6 +29,7 @@
   <idea-version since-build="107.105"/>
 
   <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.java</depends>
 
   <application-components>
     <!-- Add your application components here -->

@@ -108,9 +108,9 @@ public class GenerateCompareToAction extends AnAction {
         if (policy.isNullable()) {
           builder.append("if (" + thisName + " == null && " + thatName + " == null) {\n");
           builder.append("  // pass\n");
-          builder.append("} else if (" + thisName + " == null && " + thatName + " != null) {\n");
+          builder.append("} else if (" + thisName + " == null) {\n");
           builder.append("  return " + (ascending ? "-1;\n" : "1;\n"));
-          builder.append("} else if (" + thisName + " != null && " + thatName + " == null) {\n");
+          builder.append("} else if (" + thatName + " == null) {\n");
           builder.append("  return " + (ascending ? "1;\n} else " : "-1;\n} else "));
         }
         builder.append("if (" + thisName + ".compareTo(" + thatName + ") != 0) {\n");
