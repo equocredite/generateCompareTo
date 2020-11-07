@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/equocredite/generateCompareTo">
   <id>com.equocredite.generateCompareTo</id>
   <name>Generate compareTo</name>
-  <version>1.0</version>
+  <version>1.0.2</version>
   <vendor email="equocredite@gmail.com" url="https://github.com/equocredite">equocredite</vendor>
 
   <description><![CDATA[
@@ -22,8 +22,9 @@
       </ul>
       ]]></description>
 
-  <change-notes><![CDATA[]]>
-  </change-notes>
+  <change-notes><![CDATA[
+    Removed duplicate calls of fields' compareTo(), simplified the last comparison for non-primitive types.
+  ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
   <idea-version since-build="107.105"/>

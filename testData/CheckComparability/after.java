@@ -2,16 +2,14 @@ class MyClass implements Comparable<MyClass> {
     @Override
     public int compareTo(MyClass that) {
         if (this.comparableObject == null && that.comparableObject == null) {
-            // pass
+            return 0;
         } else if (this.comparableObject == null) {
             return -1;
         } else if (that.comparableObject == null) {
             return 1;
-        } else if (this.comparableObject.compareTo(that.comparableObject) != 0) {
-            return (this.comparableObject.compareTo(that.comparableObject) < 0 ? -1 : 1);
+        } else {
+            return this.comparableObject.compareTo(that.comparableObject);
         }
-
-        return 0;
     }
 
     private static class NonComparableClass {}

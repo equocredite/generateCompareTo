@@ -4,10 +4,6 @@ class NotNullString implements Comparable<NotNullString> {
 
     @Override
     public int compareTo(NotNullString that) {
-        if (this.foo.compareTo(that.foo) != 0) {
-            return (this.foo.compareTo(that.foo) < 0 ? -1 : 1);
-        }
-
-        return 0;
+        return this.foo.compareTo(that.foo);
     }
 }

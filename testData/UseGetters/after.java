@@ -14,8 +14,11 @@ class UseGetters implements Comparable<UseGetters> {
             return -1;
         } else if (that.getFoo() == null) {
             return 1;
-        } else if (this.getFoo().compareTo(that.getFoo()) != 0) {
-            return (this.getFoo().compareTo(that.getFoo()) < 0 ? -1 : 1);
+        } else {
+            int fooComparison = this.getFoo().compareTo(that.getFoo());
+            if (fooComparison != 0) {
+                return fooComparison < 0 ? -1 : 1;
+            }
         }
 
         if (this.bar != that.bar) {

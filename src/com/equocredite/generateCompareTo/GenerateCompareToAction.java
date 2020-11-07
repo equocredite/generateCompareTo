@@ -20,6 +20,7 @@ import java.util.List;
  *
  * Kudos to these gentlemen!
  */
+
 public class GenerateCompareToAction extends AnAction {
   private final String dialogTitle;
 
@@ -95,30 +96,48 @@ public class GenerateCompareToAction extends AnAction {
       int index = ascending ? 0 : 1;
       PsiType type = field.getType();
 
-      if (i != 0) {
+      if (i > 0) {
         builder.append("\n");
       }
 
       if (PsiUtil.isPrimitiveComparable(type)) {
-        builder.append("if (" + thisName + " != " + thatName + ") {\n");
-        // possible overflow if subtract
-        builder.append("\treturn (" + thisName + " " + COMPARISON_ORDER[index] + " " + thatName + " ? -1 : 1);\n");
-        builder.append("}\n");
+          builder.append("if (" + thisName + " != " + thatName + ") {\n");
+          // possible overflow if subtract
+          builder.append("  return (" + thisName + " " + COMPARISON_ORDER[index] + " " + thatName + " ? -1 : 1);\n");
+          builder.append("}\n");
       } else {
         if (policy.isNullable()) {
           builder.append("if (" + thisName + " == null && " + thatName + " == null) {\n");
-          builder.append("  // pass\n");
+          if (i == fields.size() - 1) {
+            builder.append("  return 0;\n");
+          } else {
+            builder.append("  // pass\n");
+          }
           builder.append("} else if (" + thisName + " == null) {\n");
           builder.append("  return " + (ascending ? "-1;\n" : "1;\n"));
           builder.append("} else if (" + thatName + " == null) {\n");
-          builder.append("  return " + (ascending ? "1;\n} else " : "-1;\n} else "));
+          builder.append("  return " + (ascending ? "1;\n} else {" : "-1;\n} else {"));
         }
-        builder.append("if (" + thisName + ".compareTo(" + thatName + ") != 0) {\n");
-        builder.append("\treturn (" + thisName + ".compareTo(" + thatName + ") " + COMPARISON_ORDER[index] + " 0 ? -1 : 1);\n");
-        builder.append("}\n");
+        if (i == fields.size() - 1) {
+          if (ascending) {
+            builder.append("return " + thisName + ".compareTo(" + thatName + ");\n");
+          } else {
+            builder.append("return " + thatName + ".compareTo(" + thisName + ");\n");
+          }
+        } else {
+          builder.append("int " + field.getName() + "Comparison = " + thisName + ".compareTo(" + thatName + ");\n");
+          builder.append("if (" + field.getName() + "Comparison != 0) {\n");
+          builder.append("  return " + field.getName() + "Comparison " + COMPARISON_ORDER[index] + " 0 ? -1 : 1;\n");
+          builder.append("}\n");
+        }
+        if (policy.isNullable()) {
+          builder.append("}\n");
+        }
       }
     }
-    builder.append("\nreturn 0;\n");
+    if (fields.isEmpty() || PsiUtil.isPrimitiveComparable(fields.get(fields.size() - 1).getPsiField().getType())) {
+      builder.append("\nreturn 0;\n");
+    }
     builder.append("}\n");
 
     setNewMethod(psiClass, builder.toString(), "compareTo");
